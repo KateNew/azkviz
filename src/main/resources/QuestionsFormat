@@ -1,0 +1,14 @@
+---abc---
+number number_of_options
+question
+right_answer
+option1
+option2
+.
+.
+.
+
+---open---
+number
+question
+right_answer
