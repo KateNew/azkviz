@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel s trojúhelníkem.
+ */
 class TrianglePanel extends JPanel {
     TrianglePanel() {
         setLayout(null);                //layout je null, aby se políčka trojúhelníku mohly umístit absolutně

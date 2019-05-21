@@ -1,5 +1,8 @@
 import javax.swing.*;
 
+/**
+ * Tlačítko pro odpovědi.
+ */
 class AnswerButton extends JButton {
 
     Questions.Type getType() {

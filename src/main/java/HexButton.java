@@ -1,5 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+
+/**
+ * Šestiúhelníkové políčko trojúhelníku.
+ */
 public class HexButton extends JButton {
     enum State {WRONG, FIRST, SECOND,CHOOSEN,NOT_CHOOSEN};
     private Polygon p = new Polygon();

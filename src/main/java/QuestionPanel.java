@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ResourceBundle;
 
+/**
+ * Panel s otázkami. Zobrazuje otázky a odpovědi.
+ */
 class QuestionPanel extends JPanel{
     private ResourceBundle rs;
     private Questions questions;
@@ -21,7 +24,7 @@ class QuestionPanel extends JPanel{
         Questions.Question q = questions.getQuestion(num);
 
         if(q.getType().equals(Questions.Type.ABC)){
-            ShowABCQuestion(q,listener);
+            showABCQuestion(q,listener);
 
         } else if (q.getType().equals(Questions.Type.OPEN)) {
             showOpenQuestion(q,listener);
@@ -37,7 +40,7 @@ class QuestionPanel extends JPanel{
         JLabel quest = new JLabel(q.getQuest());
         this.add(quest);
         JButton showAnswer = new JButton(rs.getString("answer"));
-        showAnswer.addActionListener((e)-> ShowOpenAnswer(q,listener));
+        showAnswer.addActionListener((e)-> showOpenAnswer(q,listener));
         this.add(showAnswer);
     }
 
@@ -45,7 +48,7 @@ class QuestionPanel extends JPanel{
      * @param q otázka
      * @param listener listener na odpověď
      */
-    private void ShowOpenAnswer(Questions.Question q, GamePanel.AnswerListener listener){
+    private void showOpenAnswer(Questions.Question q, GamePanel.AnswerListener listener){
 
         this.removeAll();
         JLabel answer = new JLabel(q.getAnswer());
@@ -68,7 +71,7 @@ class QuestionPanel extends JPanel{
      * @param q otázka
      * @param listener listener na odpověď
      */
-    private void ShowABCQuestion(Questions.Question q, GamePanel.AnswerListener listener){
+    private void showABCQuestion(Questions.Question q, GamePanel.AnswerListener listener){
         this.removeAll();
         JLabel quest = new JLabel(q.getQuest());
         this.add(quest);
@@ -89,7 +92,7 @@ class QuestionPanel extends JPanel{
      * @param n číslo otázky
      * @param listener listener na odpověď
      */
-    void SecondPlayerAnswers(int n, GamePanel.AnswerListener listener){
+    void secondPlayerAnswers(int n, GamePanel.AnswerListener listener){
         JLabel emptyCell = new JLabel();
         this.add(emptyCell);
         JLabel wantAnswer = new JLabel(rs.getString("wantAnswer"));

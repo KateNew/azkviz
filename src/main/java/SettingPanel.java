@@ -3,6 +3,9 @@ import java.awt.*;
 import java.io.File;
 import java.util.ResourceBundle;
 
+/**
+ * Úvodní panel. Umožňuje vybrat soubor s otázkami.
+ */
 class SettingPanel extends JPanel {
     private File file;
     private ResourceBundle rs;
@@ -11,12 +14,9 @@ class SettingPanel extends JPanel {
         this.rs = rs;
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         file= new File("QuestExample");
-        //this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-
         JLabel title = new JLabel("AZ kvíz");
         title.setFont(new Font("Arial",Font.PLAIN, 50));
         title.setAlignmentX(CENTER_ALIGNMENT);
-
         this.setLayout(new GridBagLayout());
         Container container = new Container();
         container.setLayout(new BoxLayout(container,BoxLayout.PAGE_AXIS));

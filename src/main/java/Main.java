@@ -5,6 +5,9 @@ import java.util.ResourceBundle;
 
 
 public class Main {
+    /**
+     * Vytvoří hlavní okno.
+     */
     private static void createAndShowGUI() {
         ResourceBundle rs = MyResourses.getBundle("MyResourses");
         JFrame frame = new JFrame();
@@ -28,7 +31,6 @@ public class Main {
 
         });
         frame.add(setting,BorderLayout.CENTER);
-
         frame.setDefaultCloseOperation(3);
         frame.setSize(3000,2000);
         frame.setVisible(true);

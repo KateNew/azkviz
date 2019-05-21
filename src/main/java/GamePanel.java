@@ -6,8 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
-import static java.awt.Label.CENTER;
-
+/**
+ * Hlavní panel se hrou. Obsahuje TrianglePanel a QuestionPanel.
+ */
 public class GamePanel extends JPanel implements ActionListener{
     private ResourceBundle rs;
     private Game game;
@@ -110,7 +111,7 @@ public class GamePanel extends JPanel implements ActionListener{
                     game.setState(Game.States.FIRST_WRONG);
                 else
                     game.setState(Game.States.SECOND_WRONG);
-                pQuestion.SecondPlayerAnswers(n, new AnswerListener());
+                pQuestion.secondPlayerAnswers(n, new AnswerListener());
             } else
                 wrongAnswer();
         }

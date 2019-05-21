@@ -3,12 +3,13 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Hlavní třída pro logiku hry. Obsahuje instanci trojúhelníku, obou hráčů a otázek.
+ */
 class Game{
 
     public enum States {FIRST_CHOOSES, FIRST_ANSWERS, FIRST_REANSWERS, FIRST_WRONG, SECOND_CHOOSES, SECOND_ANSWERS, SECOND_REANSWERS, SECOND_WRONG, END}
-
-
-    private States state;
+    private States state;       //aktuální stav hry
     private int size;       //délka spodní strany
     private int left;
     private Triangle triangle;
@@ -86,6 +87,9 @@ class Game{
 
     }
 
+    /**
+     * Vnitřní data trojúhelníku.
+     */
     private class Triangle {
         int n;
         int startx;

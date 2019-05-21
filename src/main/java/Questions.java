@@ -3,12 +3,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Třída s otázkami.
+ */
 class Questions{
 
     enum Type {ABC,OPEN};
     private int number;
     private ResourceBundle rs;
 
+    /**
+     * Jedna otázka.
+     */
     class Question {
         Type getType() {
             return type;
@@ -48,8 +54,8 @@ class Questions{
     /**
      * Konstruktor Questions. Zavolá funkci na načtení otázek.
      * @param file Soubor s otázkami
-     * @throws QuestFormatException
-     * @throws FileNotFoundException
+     * @throws QuestFormatException špatný formát otázek
+     * @throws FileNotFoundException soubor s otázkami nebyl nalezen
      */
     Questions(File file, ResourceBundle rs) throws QuestFormatException, FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -61,7 +67,7 @@ class Questions{
      * Načítání otázek ze souboru.
      * @param br BufferedReader
      * @return pole otázek
-     * @throws QuestFormatException
+     * @throws QuestFormatException špatný formát otázek
      */
     private Question[] ReadQuestions(BufferedReader br) throws QuestFormatException{
             List<Question> list = new ArrayList<>();
@@ -140,7 +146,7 @@ class Questions{
      * Zkontroluje, jestli je odpověď správná.
      * @param button tlačítko s odpovědí u ABC otázek, tlačítko ano/ne u OPEN otázek
      * @param n číslo otázky
-     * @return
+     * @return true = odpověď je správná, false = odpověď je chybná
      */
     boolean Check(AnswerButton button, int n){
         if (button.getType().equals(Type.ABC)) {
