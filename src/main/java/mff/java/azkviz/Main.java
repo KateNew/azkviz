@@ -1,21 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 
 public class Main {
     /**
-     * Vytvoří hlavní okno.
+     * Makes main frame.
      */
     private static void createAndShowGUI() {
-        ResourceBundle rs = MyResourses.getBundle("MyResourses");
+        Locale[] supportedLocales = {Locale.ENGLISH,new Locale("cz", "CZ"),};
+        ResourceBundle rs = ResourceBundle.getBundle("LabelsBundle");
         JFrame frame = new JFrame();
         frame.setLayout(new BorderLayout());
 
         JButton play = new JButton(rs.getString("startGame"));
         SettingPanel setting = new SettingPanel(rs,play);
-        //play odstraní panel s nastavením a přídá panel se hrou
+
+        // removes panel with setting and add panel with game
         play.addActionListener(e -> {
             try {
                 frame.remove(setting);
@@ -40,7 +43,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(() -> createAndShowGUI());
+        javax.swing.SwingUtilities.invokeLater(Main::createAndShowGUI);
     }
 
 }

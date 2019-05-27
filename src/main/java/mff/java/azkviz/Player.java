@@ -2,10 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Informace o hráči. Obsahuje indikátor stavu hry pro daného hráče.
+ * Information about player.
  */
 class Player {
-    private int[] played;       //správně zozpovězené otázky
+    private int[] played;       //correct questions
     private int correct;
 
     int getCorrect() {
@@ -38,7 +38,7 @@ class Player {
     }
 
     /**
-     * Indikátor stavu hry.
+     * Game state indicator.
      */
     private static class Indicator extends JPanel {
         private int width = 3000;

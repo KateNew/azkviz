@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 /**
- * Tlačítko pro odpovědi.
+ * Button for answers.
  */
 class AnswerButton extends JButton {
 

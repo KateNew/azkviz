@@ -1,10 +1,11 @@
+package azkviz.azkviz;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ResourceBundle;
 
 /**
- * Úvodní panel. Umožňuje vybrat soubor s otázkami.
+ * Start panel for choosing the question file.
  */
 class SettingPanel extends JPanel {
     private File file;
@@ -14,7 +15,7 @@ class SettingPanel extends JPanel {
         this.rs = rs;
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         file= new File("QuestExample");
-        JLabel title = new JLabel("AZ kvíz");
+        JLabel title = new JLabel(rs.getString("title"));
         title.setFont(new Font("Arial",Font.PLAIN, 50));
         title.setAlignmentX(CENTER_ALIGNMENT);
         this.setLayout(new GridBagLayout());
@@ -31,14 +32,14 @@ class SettingPanel extends JPanel {
     }
 
     /**
-     * Panel na výběr souboru s otázkami.
+     * Panel for choosing the file.
      */
     private class FileChooser extends JPanel{
 
         private static final long serialVersionUID = 1L;
 
         /**
-         * Vytvoří a ukáže tlačítko na otevření okna pro výběr souboru
+         * Makes and shows button which opens the file chooser.
          */
         private FileChooser() {
             JButton button = new JButton(rs.getString("chooseFile"));
@@ -47,7 +48,7 @@ class SettingPanel extends JPanel {
         }
 
         /**
-         * Vytvoří okno pro výběr souboru. Název souboru uloží do proměnné file a vypíše.
+         * Makes frame with file chooser. The name of the file saves in file variable and prints it.
          */
         private void createFileChooser(){
             JFileChooser fileChooser = new JFileChooser();

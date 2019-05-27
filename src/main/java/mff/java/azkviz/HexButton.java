@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Šestiúhelníkové políčko trojúhelníku.
+ * Hexagon button in triangle.
  */
 public class HexButton extends JButton {
     enum State {WRONG, FIRST, SECOND,CHOOSEN,NOT_CHOOSEN};
@@ -28,7 +28,7 @@ public class HexButton extends JButton {
         setPreferredSize(size);
 
         setContentAreaFilled(false);
-        //vytvoří body šestiúhelníku
+        //points of a hexagon
         for (int i = 0; i < 6; i++){
             p.addPoint((int) (50 + 50 * Math.sin(i * 2 * Math.PI / 6)),
                     (int) (50 + 50 * Math.cos(i * 2 * Math.PI / 6)));
@@ -37,8 +37,9 @@ public class HexButton extends JButton {
         color=colors[4];
     }
 
-    /** Funkce na vykreslení políčka.
-     * @param g plátno, na kterém se vykreslí políčko
+    /**
+     * Function for draw the button.
+     * @param g graphic for drawing
      */
     protected void paintComponent(Graphics g) {
         g.setColor(color);
@@ -56,8 +57,9 @@ public class HexButton extends JButton {
         return p.contains(x, y);
     }
 
-    /** Změní barvu políčka a jeho stav.
-     * @param c 0 - špatně, 1 - správně první hráč, 2 - správně druhý hráč, 3 - právě vybráno
+    /**
+     * Changes color of the button and state.
+     * @param c 0 - wrong, 1 - correct first player, 2 - correct second player, 3 - current choose
      */
     void SetColor(int c){
         color=colors[c];

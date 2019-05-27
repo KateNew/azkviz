@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.ResourceBundle;
 
 /**
- * Panel s otázkami. Zobrazuje otázky a odpovědi.
+ * Panel with questions. Shows questions and options.
  */
 class QuestionPanel extends JPanel{
     private ResourceBundle rs;
@@ -16,9 +16,10 @@ class QuestionPanel extends JPanel{
         questions=q;
     }
 
-    /** Zavolá funkci na zobrazení otázky podle typu otázky
-     * @param num číslo otázky
-     * @param listener listener na odpověď
+    /**
+     * Calls function for show the answer according the type.
+     * @param num number of question
+     * @param listener listener for answer
      */
     void ask(int num, GamePanel.AnswerListener listener){
         Questions.Question q = questions.getQuestion(num);
@@ -32,9 +33,10 @@ class QuestionPanel extends JPanel{
         this.updateUI();
     }
 
-    /** Zobrazí OPEN otázku a tlačítko na zobrazení odpovědi
-     * @param q otázka
-     * @param listener  listener na odpověď
+    /**
+     * Shows OPEN question and button for show the answer.
+     * @param q question
+     * @param listener listener for answer
      */
     private void showOpenQuestion(Questions.Question q, GamePanel.AnswerListener listener){
         JLabel quest = new JLabel(q.getQuest());
@@ -44,13 +46,15 @@ class QuestionPanel extends JPanel{
         this.add(showAnswer);
     }
 
-    /** Zobrazí odpověď na OPEN otázku a tlačítka ano/ne
-     * @param q otázka
-     * @param listener listener na odpověď
+    /**
+     * Shows the OPEN answer and buttons wrong/correct.
+     * @param q question
+     * @param listener listener for answer
      */
     private void showOpenAnswer(Questions.Question q, GamePanel.AnswerListener listener){
 
         this.removeAll();
+        JLabel quest = new JLabel(q.getQuest());
         JLabel answer = new JLabel(q.getAnswer());
 
         AnswerButton correct = new AnswerButton(rs.getString("correct"));
@@ -61,15 +65,17 @@ class QuestionPanel extends JPanel{
         wrong.setType(Questions.Type.OPEN);
         wrong.addActionListener(listener);
 
+        this.add(quest);
         this.add(answer);
         this.add(correct);
         this.add(wrong);
         this.updateUI();
     }
 
-    /** Zobrazí ABC otázku a tlačítka s odpověďmi
-     * @param q otázka
-     * @param listener listener na odpověď
+    /**
+     * Shows the ABC question and buttons with options.
+     * @param q question
+     * @param listener listener for answer
      */
     private void showABCQuestion(Questions.Question q, GamePanel.AnswerListener listener){
         this.removeAll();
@@ -87,12 +93,12 @@ class QuestionPanel extends JPanel{
     }
 
 
-    /** Funkce, která se zeptá, zda chce druhý hráč odpovídat.
-     *  Volá se jen u ABC otázek.
-     * @param n číslo otázky
-     * @param listener listener na odpověď
+    /**
+     *  Asks if second player wants to answer same question.
+     *  Only ABC question.
+     * @param listener listener for answer
      */
-    void secondPlayerAnswers(int n, GamePanel.AnswerListener listener){
+    void secondPlayerAnswers(GamePanel.AnswerListener listener){
         JLabel emptyCell = new JLabel();
         this.add(emptyCell);
         JLabel wantAnswer = new JLabel(rs.getString("wantAnswer"));

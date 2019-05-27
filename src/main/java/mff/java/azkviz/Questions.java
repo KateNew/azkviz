@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Třída s otázkami.
+ * Class with questions.
  */
 class Questions{
 
@@ -13,7 +13,7 @@ class Questions{
     private ResourceBundle rs;
 
     /**
-     * Jedna otázka.
+     * One question
      */
     class Question {
         Type getType() {
@@ -52,10 +52,10 @@ class Questions{
     private Question[] questions;
 
     /**
-     * Konstruktor Questions. Zavolá funkci na načtení otázek.
-     * @param file Soubor s otázkami
-     * @throws QuestFormatException špatný formát otázek
-     * @throws FileNotFoundException soubor s otázkami nebyl nalezen
+     * Questions constructor. Calls function for read questions from the file.
+     * @param file question file
+     * @throws QuestFormatException wrong format of question file
+     * @throws FileNotFoundException question file not found
      */
     Questions(File file, ResourceBundle rs) throws QuestFormatException, FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -64,17 +64,17 @@ class Questions{
     }
 
     /**
-     * Načítání otázek ze souboru.
-     * @param br BufferedReader
-     * @return pole otázek
-     * @throws QuestFormatException špatný formát otázek
+     * Read question from file using buffered reader.
+     * @param br buffered reader
+     * @return question array
+     * @throws QuestFormatException wrong format of question file
      */
     private Question[] ReadQuestions(BufferedReader br) throws QuestFormatException{
             List<Question> list = new ArrayList<>();
             String line;
             try {
                 while((line=br.readLine())!=null){
-                    //přeskočí prázdné řádky
+                    //skip empty lines
                     while(line.length()==0)
                         line=br.readLine();
 
@@ -82,18 +82,18 @@ class Questions{
                     int num;
                     String quest;
                     String answer;
-                    String[] options=new String[0];     //pokud je typ otázky OPEN options zůstane nulové pole
+                    String[] options=null;     //OPEN question has null options array.
                     int n;
 
                     String[] head = line.split(" ");
-                    //OPEN otázky mají v hlavičce jen číslo otázky
+                    //OPEN question has only number of question in the head.
                     if (head.length==1){
                         type=Type.OPEN;
                         num=Integer.parseInt(Character.toString(head[0].charAt(0)));
                         quest=br.readLine();
                         answer=br.readLine();
                     }
-                    //ABC mají navíc počet možností
+                    //ABC question has number of question and number of options in the head.
                     else if (head.length==2){
                         type=Type.ABC;
                         num=Integer.parseInt(head[0]);
@@ -105,7 +105,7 @@ class Questions{
                             options[i]=br.readLine();
                         }
                     }
-                    //špatná hlavička
+                    //wrong head
                     else{
                         throw new QuestFormatException("wrong question's head format");
                     }
@@ -116,14 +116,16 @@ class Questions{
             catch (IOException e){
                 throw new QuestFormatException();
             }
+            //In the head are not numbers.
             catch(NumberFormatException e2){
                 throw new QuestFormatException("wrong questions's format");
             }
-            //zkontroluje, jestli je správný počet otázek, pokud ano, vrátí pole otázek
+            //If the number of questions is correct, return array of questions.
             if (CorrectNumber(list.size())){
                 number=list.size();
                 return list.toArray(Question[]::new);
             }
+            //Else throw exception.
             else{
                 throw new QuestFormatException("wrong number of questions");
             }
@@ -132,9 +134,9 @@ class Questions{
     }
 
     /**
-     * Zkontroluje, jestli z daného počtu otázek jde udělat trojúhelník.
-     * @param num počet otázek
-     * @return true pokud ano, false pokud ne
+     * Checks if is it possible to make a triangle from the number of questions.
+     * @param num number of question
+     * @return true = it is possible, false = it is not possible
      */
     private boolean CorrectNumber(int num){
         int n=(int)Math.floor(Math.sqrt(2*num));
@@ -143,10 +145,10 @@ class Questions{
     }
 
     /**
-     * Zkontroluje, jestli je odpověď správná.
-     * @param button tlačítko s odpovědí u ABC otázek, tlačítko ano/ne u OPEN otázek
-     * @param n číslo otázky
-     * @return true = odpověď je správná, false = odpověď je chybná
+     * Checks if the answer is correct.
+     * @param button ABC - button with option, OPEN - button correct/wrong
+     * @param n number of question
+     * @return true = answer is correct, false = answer is wrong
      */
     boolean Check(AnswerButton button, int n){
         if (button.getType().equals(Type.ABC)) {

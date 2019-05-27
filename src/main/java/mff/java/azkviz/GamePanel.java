@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
 /**
- * Hlavní panel se hrou. Obsahuje TrianglePanel a QuestionPanel.
+ * Main panel contains TrianglePanel and QuestionPanel.
  */
 public class GamePanel extends JPanel implements ActionListener{
     private ResourceBundle rs;
@@ -15,12 +15,13 @@ public class GamePanel extends JPanel implements ActionListener{
     private QuestionPanel pQuestion;
 
     /**
-     * Vytvoří instanci Questions a Game a přidá panel s trojúhelníkem a panel pro otázky.
-     * Vykreslí trojúhelník a nastaví stav hry na začátek.
-     * @param file soubor s otázkami
-     * @param rs resourseBundle s texty
-     * @throws QuestFormatException soubor má špatný formát
-     * @throws FileNotFoundException soubor, který zadal uživatel nebyl nalezen
+     * Constructor of the GamePanel.
+     * Makes instance of Questions and Game and add TrianglePanel and QuestionPanel.
+     * Draws the triangle and set state of the game on beginning.
+     * @param file file with questions
+     * @param rs resourseBundle with strings
+     * @throws QuestFormatException format of the file is not correct
+     * @throws FileNotFoundException file is not found
      */
     GamePanel(File file, ResourceBundle rs) throws QuestFormatException, FileNotFoundException {
         this.rs=rs;
@@ -42,8 +43,8 @@ public class GamePanel extends JPanel implements ActionListener{
 
 
     /**
-     * Pokud políčko ještě nebylo vybráno a stav je nastaven na *_CHOOSES, závolá funkci click(b).
-     * @param e
+     * If the button have not been chosen yet and the state is *_CHOOSES, call function click().
+     * @param e action event of the button
      */
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -53,8 +54,8 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     /**
-     * Funkce po kliknutí na políčko v trojúhelníku. Zavolá funkci na zobrazení otázky a změní stav na *_ANSWERS.
-     * @param button políčko v trojúhelníku
+     * Function after click on a button in triangle. It calls the function which shows question and changes the state to *_ANSWERS.
+     * @param button button in triangle
      */
     private void click(HexButton button){
         game.NextHex();
@@ -70,10 +71,13 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     /**
-     *  Pokud se zavolal listener po stisknutí tlačíka AnswerButton (u ABC otázek) a stav je nastaven na odpovídání, zavolá se funkce answer, která zpracuje odpověd
-     *  Pokud se zavolal z JButton jde o odpověď, jestli chce odpovídat druhý hráč. Zavolá se buď funkce wrongAnswer nebo reanswer.
+     * ActionListener for processing answers.
      */
     public class AnswerListener implements ActionListener{
+        /**
+         *  If AnswerButton calls listener and the state is *ANSWERS, it calls function answer() which process the answer.
+         *  If JButton calls listener, button says if second player wants answer again. It call function wrongAnswer() or reanswer().
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             Object button = e.getSource();
@@ -94,25 +98,26 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     /**
-     * Funkce po po kliknutí na odpověď.
-     * Pokud je odpověď správná (funkce CheckQuestion) zavolá se fuknce correctAnswer.
-     * Jinak pokud je možné, aby odpovídat druhý hráč, zavolá se funkce SecondPlayerAnswer, jinak wrongAnswer
-     * @param b tlačítko s odpovědí, na které uživatel klikl
+     * Function after click on answer button.
+     * If the answer is correct (function checkQuestion), calls function correctAnswer().
+     * Else if second player can answer, it calls function secondPlayerAnswer(), else wrongAnswer().
+     * Last check if there are some free buttons. If not, calls function end().
+     * @param b button with answer
      */
     private void answer(AnswerButton b){
         HexButton button=game.getTriangleLastClicked();
         int n=button.getNumber();
-        if (game.CheckQuestion(b, n))
+        if (game.checkQuestion(b, n))
             correctAnswer();
         else {
             if (game.canReanswer(n) && (game.getState() == Game.States.FIRST_ANSWERS || game.getState() == Game.States.SECOND_ANSWERS)) {
-                //kdyby zůstalo *_ANSWERS šlo by stisknout tlačítko na odpověď i v situaci, kdy se ptáme, jestli chce odpovídat druhý hráč
                 if (game.getState() == Game.States.FIRST_ANSWERS)
                     game.setState(Game.States.FIRST_WRONG);
                 else
                     game.setState(Game.States.SECOND_WRONG);
-                pQuestion.secondPlayerAnswers(n, new AnswerListener());
-            } else
+                pQuestion.secondPlayerAnswers(new AnswerListener());
+            }
+            else
                 wrongAnswer();
         }
         switch (game.isFull()){
@@ -135,8 +140,8 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     /**
-     * Funkce, která se zavolá, pokud byla odpověď špatná a není možné znovu odpovídat.
-     * Nastaví políčku barvu na špatně zodpovězeno a zavolá funkci na změnu stavu na *_CHOOSES
+     * Function which is called if the answers was wrong.
+     * Sets color of the button and calls function choose().
      */
     private void wrongAnswer(){
         HexButton button = game.getTriangleLastClicked();
@@ -146,9 +151,9 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     /**
-     * Funkce, která se zavolá, pokud byla odpověď správná.
-     * Nastaví barvu políčka, přidá políčko do políček daného hráče a zkontroluje, jestli nebyl propojen trojúhelník.
-     * Pokud ano, ukončí hru. Pokud ne, zavolá funkci na změnu stavu na *_CHOOSES.
+     * Function which is called if the answer was correct.
+     * Sets color of the button, add button to player's buttons.
+     * If the triangle is connect (function isTriangleConnect()), calls end().
      */
     private void correctAnswer(){
         HexButton button=game.getTriangleLastClicked();
@@ -176,8 +181,8 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     /**
-     * Funkce na změnu stavu na *_CHOOSES.
-     * Zavolá funkci na změnu barvy indikátoru.
+     * Function for changing state to *_CHOOSES.
+     * Calls function changeIndicator().
      */
     private void choose(){
         if (game.getState()== Game.States.FIRST_ANSWERS || game.getState() == Game.States.FIRST_REANSWERS || game.getState()== Game.States.FIRST_WRONG)
@@ -190,8 +195,8 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     /**
-     *  Funkce pro odpovídání druhého hráče (pokud první odpověděl špatně).
-     *  Změní stav na *_REANSWERS, zavolá funkci na změnu barvy indikátoru a zavolá funkci ask.
+     *  Function which is called if second player wants to answer the same question.
+     *  Changes state to *_REANSERS, calls function for changing indicator and calls function ask().
      */
     private void reanswer(){
         int n = game.getTriangleLastClicked().getNumber();
@@ -206,7 +211,7 @@ public class GamePanel extends JPanel implements ActionListener{
     }
 
     /**
-     * Přidá na panel aktuální indikátor.
+     * Adds right indicator to the panel.
      */
     private void changeIndicator(){
         if (game.getState()== Game.States.FIRST_ANSWERS || game.getState() == Game.States.FIRST_REANSWERS || game.getState()== Game.States.FIRST_CHOOSES){
@@ -222,8 +227,8 @@ public class GamePanel extends JPanel implements ActionListener{
 
 
     /**
-     * Funkce pro ukončení hry. Nastaví stav hry na END a zobrazí label s informací o vítězi.
-     * @param string Řetězec, který informuje o vítězi.
+     * Function for end of the game. Changes game state to END and shows label with information about winner.
+     * @param string string with information about winner
      */
     private void end(String string){
         game.setState(Game.States.END);

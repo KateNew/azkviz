@@ -2,21 +2,21 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel s trojúhelníkem.
+ * Panel with the triangle.
  */
 class TrianglePanel extends JPanel {
     TrianglePanel() {
-        setLayout(null);                //layout je null, aby se políčka trojúhelníku mohly umístit absolutně
+        setLayout(null);
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
     /**
-     * Vytvoří HexButton jako políčka trojúhelníku a přidá je na panel
-     * @param triangleSize počet řádek trojúhelníku
-     * @param startx počáteční pozice x
-     * @param starty počáteční pozice y
-     * @param size velikost tlačítka
-     * @param labels pole popisků
+     * Make HexButtons in the triangle and add them on the panel.
+     * @param triangleSize number of row in the triangle
+     * @param startx start position x
+     * @param starty start position y
+     * @param size size of the button
+     * @param labels array of the button labels
      */
     void DrawTriangle(int triangleSize, int startx, int starty, int size, String[] labels,GamePanel gamePanel) {
         int index=0;

@@ -4,14 +4,14 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Hlavní třída pro logiku hry. Obsahuje instanci trojúhelníku, obou hráčů a otázek.
+ * Main class for game logic. Contains triangle, both players and questions.
  */
 class Game{
 
     public enum States {FIRST_CHOOSES, FIRST_ANSWERS, FIRST_REANSWERS, FIRST_WRONG, SECOND_CHOOSES, SECOND_ANSWERS, SECOND_REANSWERS, SECOND_WRONG, END}
-    private States state;       //aktuální stav hry
-    private int size;       //délka spodní strany
-    private int left;
+    private States state;       //current game state
+    private int size;       //number of lines in triangle
+    private int left;       //number of free buttons
     private Triangle triangle;
     private Player secondPlayer;
     private Player firstPlayer;
@@ -31,20 +31,20 @@ class Game{
     void setState(States state) { this.state = state; }
     States getState() { return state; }
     void NextHex(){left-- ;}
-    boolean CheckQuestion(AnswerButton b,int n){return questions.Check(b,n);}
+    boolean checkQuestion(AnswerButton b, int n){return questions.Check(b,n);}
 
     /**
-     * Pokud je typ otázky ABC, je možné na ni odpovídat znovu.
-     * @param n číslo otázky
-     * @return true = otázka je ABC, false = otázka je OPEN
+     * If the type of question is ABC, second player can answer same question.
+     * @param n number of question
+     * @return true = question is ABC, false = question is OPEN
      */
     boolean canReanswer(int n){
         return questions.getQuestion(n).getType().equals(Questions.Type.ABC);
     }
 
     /**
-     * Funkce, která zjistí, jestli už je trojúhelník zcela zaplněn a pokud ano, kdo má víc správných odpovědí.
-     * @return -1 = ještě zbývají volná políčka, 0 = remíza, 1 = první hráč má víc správných, 2 = druhý hráč má víc správných
+     * Function which finds out if there are some free buttons. If not, finds out, who has more correct answers.
+     * @return -1 = there are some free buttons, 0 = draw, 1 = first player has more correct answers, 2 = second player has more correct answers
      */
     int isFull(){
         if (left>0)
@@ -57,9 +57,10 @@ class Game{
             return 0;
 
     }
-    /**Zavolá funkci, která zjistí, jestli daný hráč propojil trojúhelník
-     * @param player číslo hráče
-     * @return true = propojil, false = nepropojil
+    /**
+     * Calls function IsConnected() for player.
+     * @param player 1 = first player, 2 = second player
+     * @return true = is connect, false = not connect
      */
     boolean isTriangleConnect(int player) {
         switch (player) {
@@ -72,13 +73,13 @@ class Game{
     }
 
     /**
-     * Konstruktor Game. Spočítá velikost trojúhelníku, vytvoří instanci trojúhelníku a hráčů. Nastaví stav na FIRST_CHOOSES (začátek hry).
-     * @param q třída s otázkami
+     * Game constructor. Counts size of triangle, makes instance of triangle and players. Sets state for FIRST_CHOOSES (beginning of a game).
+     * @param q questions class
      */
     Game(Questions q){
         questions=q;
-        int n = questions.NumberOfQuestions();      //počet políček
-        this.size =(int)Math.floor(Math.sqrt(2* n));        //počet řádků/počet políček v posledním řádku
+        int n = questions.NumberOfQuestions();      //number of buttons
+        this.size =(int)Math.floor(Math.sqrt(2* n));        //number of lines in triangle
         this.left=n;
         triangle= new Triangle(n,size);
         firstPlayer=new Player(n, Color.blue);
@@ -88,7 +89,7 @@ class Game{
     }
 
     /**
-     * Vnitřní data trojúhelníku.
+     * Inner data of triangle.
      */
     private class Triangle {
         int n;
@@ -99,19 +100,20 @@ class Game{
         HexButton lastclicked;
 
         List<String> labelList = new ArrayList<>();
-        String[] labels;        //popisky políček
+        String[] labels;        //triangle labels
 
-        //krajní políčka
+        //buttons on borders
         int[] left;
         int[] right;
         int[] bottom;
 
-        //graf - matice sousednosti políček
+        //graph - incidence matrix
         int[][] graph;
 
-        /** Konstruktor Triangle. Vytvoří popisky, spočte indexy krajních políček, vytvoří graf.
-         * @param n počet políček
-         * @param size velikost trojúhelníku
+        /**
+         * Triangle constructor. Makes labels, counts index of buttons on borders, makes graph.
+         * @param n number of buttons
+         * @param size number of line in triangle
          */
         Triangle(int n, int size) {
             this.startx = 380;
@@ -141,10 +143,9 @@ class Game{
         }
 
         /**
-         * Vytvoří graf sousedních políček v trojúhelníku reprezentovaný maticí sousednosti.
-         *
-         * @param n počet políček
-         * @return matice sousednosti
+         * Makes graph of neighbour buttons represents by incidence matrix.
+         * @param n number of button
+         * @return incidence matrix
          */
         private int[][] MakeGraph(int n, int size) {
             int[][] g = new int[n][n];
@@ -152,16 +153,16 @@ class Game{
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j <= i; j++) {
                     if (k < n - size) {
-                        g[k][k + i + 1] = 1;        //políčko vlevo dole
+                        g[k][k + i + 1] = 1;        //button left down
                         g[k + i + 1][k] = 1;
-                        g[k][k + i + 2] = 1;        //políčko vpravo dole
+                        g[k][k + i + 2] = 1;        //button right down
                         g[k + i + 2][k] = 1;
                     }
                     if (j != i) {
-                        g[k][k + 1] = 1;        //políčko vpravo
+                        g[k][k + 1] = 1;        //button right
                     }
                     if (j != 0) {
-                        g[k][k - 1] = 1;        //políčko vlevo
+                        g[k][k - 1] = 1;        //button left
                     }
                     k++;
                 }
@@ -171,50 +172,49 @@ class Game{
 
 
         /**
-         * Zjišťuje, zda daná políčka propojují všechny tři strany trojúhelníku.
-         * Prohledává graf sousedních vrachoů pomocí BFS
-         *
-         * @param fields indexy daných políček
-         * @return true, pokud jsou strany propojeny; false jinak
+         * Finds out if given buttons connect all sides of triangle.
+         * Searches graph using BFS.
+         * @param fields index of buttons
+         * @return true if sides are connect
          */
         boolean IsConnected(int[] fields) {
-            int[] b = new int[size];        //pole políček na dolní straně
+            int[] b = new int[size];        //array of buttons on bottom
             for (int i = 0; i < size; i++) {
                 b[i] = -1;
             }
             int[] ok = new int[2];
             int index = 0;
-            for (int i : fields       //přidáme dolní políčka
+            for (int i : fields       //add bottom button
             ) {
                 if (Contains(i, bottom)) {
                     b[index] = i;
                 }
             }
-            if (b[0] == -1)       //žádné dolní políčko neexistuje, trojúhelník není propojený
+            if (b[0] == -1)       //no button on bottom, triangle is not connect
                 return false;
 
             Queue<Integer> queue = new ArrayDeque<>();
             for (int item : b
             ) {
                 if (item != -1)
-                    queue.add(item);        //přidáme do fronty všechny dolní políčka
+                    queue.add(item);        //add all bottom button in queue
             }
             while (queue.size() > 0) {
-                int x = queue.remove();     //odebereme políčko z fronty
-                fields = Arrays.stream(fields).filter(a -> a != x).toArray();        //a z pole všech políček
+                int x = queue.remove();     //remove button from queue
+                fields = Arrays.stream(fields).filter(a -> a != x).toArray();        //and remove it from array of all buttons
 
-                if (Contains(x, left))       //políčko je na levé straně
+                if (Contains(x, left))       //button on left side
                     ok[0] = 1;
-                if (Contains(x, right))      //políčko je na pravé straně
+                if (Contains(x, right))      //button on right side
                     ok[1] = 1;
 
                 for (int i = 0; i < graph[x].length; i++) {
-                    if (graph[x][i] == 1 && Contains(i, fields)) {      //přidáme do fronty všechny sousední políčka
+                    if (graph[x][i] == 1 && Contains(i, fields)) {      //add all neighbours button in queue
                         queue.add(i);
                     }
                 }
             }
-            return ok[0] == 1 && ok[1] == 1;        //existuje cesta z dolní strany do levé i pravé
+            return ok[0] == 1 && ok[1] == 1;        //there is path from bottom to left and right side
         }
 
         boolean Contains(int a, int[] field) {
