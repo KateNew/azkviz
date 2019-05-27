@@ -1,4 +1,4 @@
-package azkviz.azkviz;
+package mff.java.azkviz;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
